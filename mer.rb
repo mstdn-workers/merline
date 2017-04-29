@@ -92,10 +92,12 @@ def readline_and_post(client)
   client.create_status(line)
 end
 
-
-
 # require 'pry'
 # binding.pry
+
+def remove_tag(str)
+  str.gsub(/<([^>]+)>/, "")
+end
 
 def status_to_string(status)
   return if not status.respond_to?(:account)
@@ -108,7 +110,7 @@ def status_to_string(status)
       account.display_name,
       "@" + account.acct
     ].join("\t"),
-    content,
+    remove_tag(content),
     ""
   ].join("\n")
 end
