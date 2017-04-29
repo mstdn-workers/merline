@@ -97,11 +97,29 @@ end
 # require 'pry'
 # binding.pry
 
+def status_to_string(status)
+  return if not status.respond_to?(:account)
+  return if not status.respond_to?(:content)
+  account = status.account
+  content = status.content
+  return [
+    [
+      "[" + status.created_at + "]",
+      account.display_name,
+      "@" + account.acct
+    ].join("\t"),
+    content,
+    ""
+  ].join("\n")
+end
+
 stream_client, rest_client = init_app
 tl_thread = Thread.new do
   stream_client.stream('public/local') do | status |
-    reset_current_line
-    puts status.content if status.respond_to?(:content)
+    if line = status_to_string(status) then
+      reset_current_line
+      puts line
+    end
   end
 end
 
