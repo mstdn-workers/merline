@@ -1,3 +1,4 @@
+# coding: utf-8
 require "rubygems"
 require "bundler/setup"
 
@@ -92,10 +93,12 @@ def readline_and_post(client)
   client.create_status(line)
 end
 
-
-
 # require 'pry'
 # binding.pry
+
+def remove_tag(str)
+  str.gsub(/<([^>]+)>/, "")
+end
 
 def content_convert(content)
   require 'cgi'
@@ -103,6 +106,7 @@ def content_convert(content)
   content.gsub!(/<p>(.*)<\/p>/m) do |text|
     $1
   end
+  # content = remove_tag content  # 対処しなきゃいけないタグを見やすくするため今はコメントアウト
   CGI.unescapeHTML content
 end
 
