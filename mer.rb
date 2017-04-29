@@ -97,6 +97,11 @@ end
 # require 'pry'
 # binding.pry
 
+def content_convert(content)
+  require 'cgi'
+  CGI.unescapeHTML content
+end
+
 def status_to_string(status)
   return if not status.respond_to?(:account)
   return if not status.respond_to?(:content)
@@ -108,7 +113,7 @@ def status_to_string(status)
       account.display_name,
       "@" + account.acct
     ].join("\t"),
-    content,
+    content_convert(content),
     ""
   ].join("\n")
 end
