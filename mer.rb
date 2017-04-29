@@ -99,6 +99,10 @@ end
 
 def content_convert(content)
   require 'cgi'
+  content.gsub!(/<br \/>/, "\n")
+  content.gsub!(/<p>(.*)<\/p>/m) do |text|
+    $1
+  end
   CGI.unescapeHTML content
 end
 
