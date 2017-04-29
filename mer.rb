@@ -104,7 +104,7 @@ def status_to_string(status)
   content = status.content
   return [
     [
-      "[" + status.created_at + "]",
+      "[" + Time.iso8601(status.created_at).localtime.to_s + "]",
       account.display_name,
       "@" + account.acct
     ].join("\t"),
