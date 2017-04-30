@@ -115,10 +115,12 @@ def status_to_string(status)
   return if not status.respond_to?(:content)
   account = status.account
   content = status.content
+  display_name = account.display_name
+  display_name = account.acct if display_name.empty?
   return [
     [
-      "[" + Time.iso8601(status.created_at).localtime.to_s + "]",
-      account.display_name,
+      "[#{Time.iso8601(status.created_at).localtime}]",
+      display_name,
       "@" + account.acct
     ].join("\t"),
     content_convert(content),
