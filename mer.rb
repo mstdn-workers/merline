@@ -113,6 +113,10 @@ def process_hashtag!(content)
   end
 end
 
+def process_link!(content)
+
+end
+
 def content_convert(content)
   require 'cgi'
   content.gsub!(/<br \/>/, "\n")
@@ -121,7 +125,8 @@ def content_convert(content)
   end
   # content = remove_tag content  # 対処しなきゃいけないタグを見やすくするため今はコメントアウト
   process_hashtag! content
-  process_image! content
+  process_link! content
+#   process_image! content
   CGI.unescapeHTML content
 end
 
