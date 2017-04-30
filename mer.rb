@@ -124,8 +124,8 @@ def content_convert(content)
     $1
   end
   # content = remove_tag content  # 対処しなきゃいけないタグを見やすくするため今はコメントアウト
-  process_hashtag! content
-  process_link! content
+  # process_hashtag! content
+  # process_link! content
 #   process_image! content
   CGI.unescapeHTML content
 end
