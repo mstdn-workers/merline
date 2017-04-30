@@ -100,23 +100,6 @@ def remove_tag(str)
   str.gsub(/<([^>]+)>/, "")
 end
 
-def process_image!(content)
-  content.gsub!(/<a.+?href="([^"]*)".+?<\/a>/) do |x|
-    "[image: " + $1 + "]"
-  end
-end
-
-def process_hashtag!(content)
-  # 何かの役に立つかもしれないから、$1でurlを取れるようにはしてある
-  content.gsub!(/<a href="([^"]*)[^>]*>#<span>(.+?)<\/span><\/a>/) do |text|
-    "#" + $2
-  end
-end
-
-def process_link!(content)
-
-end
-
 def content_convert(content)
   require 'cgi'
   content.gsub!(/<br \/>/, "\n")
@@ -124,9 +107,6 @@ def content_convert(content)
     $1
   end
   # content = remove_tag content  # 対処しなきゃいけないタグを見やすくするため今はコメントアウト
-  process_hashtag! content
-  process_link! content
-#   process_image! content
   CGI.unescapeHTML content
 end
 
