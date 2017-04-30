@@ -106,7 +106,7 @@ def content_convert(content)
   content.gsub!(/<p>(.*)<\/p>/m) do |text|
     $1
   end
-  # content = remove_tag content  # 対処しなきゃいけないタグを見やすくするため今はコメントアウト
+  content = remove_tag content
   CGI.unescapeHTML content
 end
 
