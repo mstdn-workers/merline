@@ -8,7 +8,7 @@ gitのようなコマンド型と、インタープリタのようなシェル�
 
 ### Installation
 ```shell
-$ git clone https://github.com/workaholic-from-mastodon/merline.git
+$ git clone https://github.com/mstdn-workers/merline.git
 $ cd merline
 $ bundle install --path vendor/bundle
 $ bundle exec ruby mer.rb
