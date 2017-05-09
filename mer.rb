@@ -98,56 +98,9 @@ end
 # require 'pry'
 # binding.pry
 
-def remove_tag(str)
-  str.gsub(/<([^>]+)>/, "")
-end
-
-def process_image!(content)
-  content.gsub!(/<a.+?href="([^"]*)".+?<\/a>/) do |x|
-    "[image: " + $1 + "]"
-  end
-end
-
-def process_hashtag!(content)
-  # 何かの役に立つかもしれないから、$1でurlを取れるようにはしてある
-  content.gsub!(/<a href="([^"]*)[^>]*>#<span>(.+?)<\/span><\/a>/) do |text|
-    "#" + $2
-  end
-end
-
-def process_link!(content)
-
-end
-
-def content_convert(content)
-  require 'cgi'
-  content.gsub!(/<br \/>/, "\n")
-  content.gsub!(/<p>(.*)<\/p>/m) do |text|
-    $1
-  end
-  # content = remove_tag content  # 対処しなきゃいけないタグを見やすくするため今はコメントアウト
-  # process_hashtag! content
-  # process_link! content
-#   process_image! content
-  CGI.unescapeHTML content
-end
-
 def status_to_string(status)
-  return if not status.respond_to?(:account)
-  return if not status.respond_to?(:content)
-  account = status.account
-  content = status.content
-  display_name = account.display_name
-  display_name = account.acct if display_name.empty?
-  return [
-    [
-      "[#{Time.iso8601(status.created_at).localtime}]",
-      display_name,
-      "@" + account.acct
-    ].join("\t"),
-    content_convert(content),
-    ""
-  ].join("\n")
+  require "./tootformat.rb"
+  Formatter.format_status status
 end
 
 begin
