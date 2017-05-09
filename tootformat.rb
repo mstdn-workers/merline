@@ -48,6 +48,7 @@ module Formatter
 
     def preprocess_content(content)
       content = content.gsub(/<p>(.*)<\/p>/m) { $1 }
+      content = content.gsub(/<p><\/p>/, "<br /><br />") # あんま美しくないので段落については考える
       # content = remove_tag content  # 対処しなきゃいけないタグを見やすくするため今はコメントアウト
       # process_hashtag! content
       # process_link! content
