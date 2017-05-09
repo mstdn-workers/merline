@@ -14,8 +14,7 @@ module Formatter
       account = status.account
       content = status.content
       @username = account.acct
-      @display_name = account.display_name
-      @display_name = @username if @display_name.empty?
+      @display_name = "#{DisplayNameFormatter.new status}"
       @time_local = Time.iso8601(status.created_at).localtime
 
       @content = preprocess_content content
@@ -55,6 +54,31 @@ module Formatter
       #   process_image! content
       content = br content
       CGI.unescapeHTML content
+    end
+  end
+
+  class DisplayNameFormatter
+    require 'gemoji'
+
+    def emojify(str)
+      str.gsub(/:([\w+-]+?):/) { |matched|
+        if emoji = Emoji.find_by_alias($1) then
+          emoji.raw
+        else
+          matched
+        end
+      }
+    end
+
+    def to_s
+      emojify @display_name
+    end
+
+    def initialize(status)
+      account = status.account
+      @username = account.acct
+      @display_name = account.display_name
+      @display_name = @username if @display_name.empty?
     end
   end
 
