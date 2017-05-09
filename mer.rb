@@ -106,11 +106,22 @@ end
 begin
   stream_client, rest_client = init_app
   tl_thread = Thread.new do
-    stream_client.stream('public/local') do | status |
-      if line = status_to_string(status) then
-        reset_current_line
-        puts line
+    MAX_TRIES = 5
+    tries = 0
+    begin
+      stream_client.stream('public/local') do | status |
+        if line = status_to_string(status) then
+          tries = 0
+          reset_current_line
+          puts line
+        end
       end
+    rescue EOFError => e
+      retry if (tries += 1) < MAX_TRIES
+      sleep 60
+      retry
+    else
+      raise e
     end
   end
 
