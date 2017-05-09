@@ -16,11 +16,13 @@ DEFAULT_CONFIG = {
 TOKEN_FILE_NAME = '.access_token'
 DEFAULT_CONFIG_FILE_NAME = 'config.json'
 
-stty_save = `stty -g`.chomp
+@stty_save = `stty -g`.chomp
+def stty_load
+  system("stty", @stty_save)
+end
 
 Signal.trap(:INT) do
-  system("stty", stty_save)
-  puts ""
+  stty_load
   exit 0
 end
 
@@ -148,21 +150,27 @@ def status_to_string(status)
   ].join("\n")
 end
 
-stream_client, rest_client = init_app
-tl_thread = Thread.new do
-  stream_client.stream('public/local') do | status |
-    if line = status_to_string(status) then
-      reset_current_line
-      puts line
+begin
+  stream_client, rest_client = init_app
+  tl_thread = Thread.new do
+    stream_client.stream('public/local') do | status |
+      if line = status_to_string(status) then
+        reset_current_line
+        puts line
+      end
     end
   end
-end
 
-post_thread = Thread.new do
-  loop do
-    readline_and_post rest_client
+  post_thread = Thread.new do
+    loop do
+      readline_and_post rest_client
+    end
   end
-end
 
-tl_thread.join
-post_thread.join
+  tl_thread.join
+  post_thread.join
+rescue => e
+  stty_load
+  p e
+  exit
+end
