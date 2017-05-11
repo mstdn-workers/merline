@@ -116,7 +116,7 @@ begin
           puts line
         end
       end
-    rescue EOFError => e
+    rescue EOFError, Mastodon::Error::BadGateway => e
       retry if (tries += 1) < MAX_TRIES
       sleep 60
       retry
