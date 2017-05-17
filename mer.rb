@@ -106,6 +106,7 @@ end
 begin
   stream_client, rest_client = init_app
   tl_thread = Thread.new do
+    f = File.open(ARGV[0], "a")
     MAX_TRIES = 5
     tries = 0
     begin
@@ -114,6 +115,7 @@ begin
           tries = 0
           reset_current_line
           puts line
+	  f.puts line
         end
       end
     rescue EOFError, Mastodon::Error::BadGateway => e
@@ -123,6 +125,7 @@ begin
     else
       raise e
     end
+    f.close()
   end
 
   post_thread = Thread.new do

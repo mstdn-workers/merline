@@ -17,7 +17,8 @@ module Formatter
       @display_name = "#{DisplayNameFormatter.new status}"
       @time_local = Time.iso8601(status.created_at).localtime
 
-      @content = preprocess_content content
+      # @content = preprocess_content content
+      @content = content
     end
 
     private
